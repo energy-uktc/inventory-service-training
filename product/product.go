@@ -9,5 +9,4 @@ type Product struct {
 	PricePerUnit   string `json:"pricePerUnit"`
 	QuantityOnHand int    `json:"quantityOnHand"`
 	ProductName    string `json:"productName"`
-	NewField       string
 }

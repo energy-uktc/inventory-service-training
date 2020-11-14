@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/energy-uktc/inventoryservice/product"
+	"github.com/energy-uktc/inventory-service-training/product"
 )
 
 type Test struct {

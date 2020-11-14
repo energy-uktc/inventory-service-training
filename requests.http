@@ -1,0 +1,24 @@
+GET http://localhost:8081/api/products/13
+
+###
+
+GET   http://localhost:8081/api/products/11
+
+###
+
+GET http://localhost:8081/api/products
+
+###
+
+POST http://localhost:8081/api/products HTTP/2.0
+Content-Type: application/json
+
+{
+  "manufacturer": "Moore-Gibson",
+  "sku": "c4i321mvh",
+  "upc": "600535000000",
+  "pricePerUnit": "150.98",
+  "quantityOnHand": 6219,
+  "productName": "lip gloss 2"
+}
+

@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/energy-uktc/inventory-service-training/middleware"
 )
 
 const productsPath = "products"
@@ -125,6 +127,6 @@ func handleProducts(wr http.ResponseWriter, r *http.Request) {
 func Setup(apiBasePath string) {
 	productsHandler := http.HandlerFunc(handleProducts)
 	productHandler := http.HandlerFunc(handleProduct)
-	http.Handle(fmt.Sprintf("%s/%s", apiBasePath, productsPath), productsHandler)
-	http.Handle(fmt.Sprintf("%s/%s/", apiBasePath, productsPath), productHandler)
+	http.Handle(fmt.Sprintf("%s/%s", apiBasePath, productsPath), middleware.MiddlewareFunc(productsHandler))
+	http.Handle(fmt.Sprintf("%s/%s/", apiBasePath, productsPath), middleware.MiddlewareFunc(productHandler))
 }
