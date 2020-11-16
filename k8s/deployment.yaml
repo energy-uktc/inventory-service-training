@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-service-training
+spec:
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: inventory-service-training
+  template:
+    metadata:
+      labels:
+        app: inventory-service-training
+    spec:
+      containers:
+        - name: inventory-service-training
+          image: inventory-service-training:0.0.1
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8081

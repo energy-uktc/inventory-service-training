@@ -24,6 +24,6 @@ func simpleFunction(wr http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/api/simple", simpleFunction)
 	http.Handle("/api/test", &Test{Message: "Hello 2"})
-	product.Setup("/api")
+	product.SetupRoutes("/api")
 	http.ListenAndServe(":8081", nil)
 }

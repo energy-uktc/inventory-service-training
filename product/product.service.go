@@ -29,7 +29,7 @@ func handleProduct(wr http.ResponseWriter, r *http.Request) {
 			wr.WriteHeader((http.StatusNotFound))
 			return
 		}
-		product, _ := getProduct(productID)
+		product := getProduct(productID)
 		if product == nil {
 			wr.WriteHeader(http.StatusNotFound)
 			return
@@ -50,7 +50,7 @@ func handleProduct(wr http.ResponseWriter, r *http.Request) {
 			wr.WriteHeader((http.StatusNotFound))
 			return
 		}
-		product, indx := getProduct(productID)
+		product := getProduct(productID)
 		if product == nil {
 			wr.WriteHeader(http.StatusNotFound)
 			return
@@ -68,12 +68,24 @@ func handleProduct(wr http.ResponseWriter, r *http.Request) {
 			wr.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		if updatedProduct.ProductID != productID {
+		_, err = writeProduct(updatedProduct)
+		if err != nil {
 			wr.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		productList[indx] = updatedProduct
-
+	case http.MethodDelete:
+		productID, err := strconv.Atoi(urlPathSegments[len(urlPathSegments)-1])
+		if err != nil {
+			log.Print(err)
+			wr.WriteHeader((http.StatusNotFound))
+			return
+		}
+		product := getProduct(productID)
+		if product == nil {
+			wr.WriteHeader(http.StatusNotFound)
+			return
+		}
+		removeProduct(productID)
 	default:
 		wr.WriteHeader(http.StatusMethodNotAllowed)
 	}
@@ -83,7 +95,7 @@ func handleProduct(wr http.ResponseWriter, r *http.Request) {
 func handleProducts(wr http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		products, err := json.MarshalIndent(productList, "", "	")
+		products, err := json.MarshalIndent(getProductList(), "", "	")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -107,9 +119,12 @@ func handleProducts(wr http.ResponseWriter, r *http.Request) {
 			wr.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		product.ProductID = getNextProductID()
-		productList = append(productList, product)
-		p, _ := json.MarshalIndent(product, "", "	")
+		createdProduct, err := writeProduct(product)
+		if err != nil {
+			wr.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		p, _ := json.MarshalIndent(createdProduct, "", "	")
 		wr.Header().Set("Content-Type", "application/json")
 		wr.WriteHeader(http.StatusCreated)
 		wr.Write(p)
@@ -124,7 +139,7 @@ func handleProducts(wr http.ResponseWriter, r *http.Request) {
 }
 
 //Setup products route
-func Setup(apiBasePath string) {
+func SetupRoutes(apiBasePath string) {
 	productsHandler := http.HandlerFunc(handleProducts)
 	productHandler := http.HandlerFunc(handleProduct)
 	http.Handle(fmt.Sprintf("%s/%s", apiBasePath, productsPath), middleware.MiddlewareFunc(productsHandler))

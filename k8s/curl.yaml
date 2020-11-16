@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curl
+spec:
+  selector:
+    matchLabels:
+      name: curl
+  template:
+    metadata:
+      labels:
+        name: curl
+    spec:
+      containers:
+        - name: curl
+          image: curlimages/curl
+          command: ["sleep", "3600"]
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: curl
+              mountPath: /var/run
+      volumes:
+        - name: curl
+          hostPath:
+            path: /var/run

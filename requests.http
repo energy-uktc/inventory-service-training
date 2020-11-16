@@ -2,7 +2,7 @@ GET http://localhost:8081/api/products/13
 
 ###
 
-GET   http://localhost:8081/api/products/11
+GET   http://localhost:8081/api/products/191
 
 ###
 
@@ -22,3 +22,25 @@ Content-Type: application/json
   "productName": "lip gloss 2"
 }
 
+###
+
+PUT http://localhost:8081/api/products/192 HTTP/2.0
+Content-Type: application/json
+
+{
+  "productID" : 192,
+  "manufacturer": "Moore-Gibson",
+  "sku": "c4i321mvh",
+  "upc": "600535000000",
+  "pricePerUnit": "150.98",
+  "quantityOnHand": 6219,
+  "productName": "lip gloss 5"
+}
+
+###
+
+DELETE    http://localhost:8081/api/products/191
+
+###
+
+GET http://localhost:30859/api/products

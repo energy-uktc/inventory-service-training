@@ -11,7 +11,7 @@ RUN go mod download
 RUN go build -v 
 
 FROM alpine:3.12.0
-COPY --from=build /go/src/inventoryservice/inventoryservice /usr/local/lib/inventoryservice/inventoryservice
+COPY --from=build /go/src/inventoryservice/inventory-service-training /usr/local/lib/inventoryservice/inventory-service-training
 COPY --from=build /go/src/inventoryservice/products.json /usr/local/lib/inventoryservice/products.json
 WORKDIR /usr/local/lib/inventoryservice
-CMD ["/usr/local/lib/inventoryservice/inventoryservice"]
+CMD ["/usr/local/lib/inventoryservice/inventory-service-training"]
